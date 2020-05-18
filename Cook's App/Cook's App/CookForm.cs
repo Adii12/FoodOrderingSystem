@@ -13,13 +13,17 @@ namespace Cook_s_App {
         public CookForm() {
             InitializeComponent();
             dashboardUserControl1.BringToFront();
+            currentPanel.Top = dashboardButton.Top;
+            
         }
 
         private void ordersButton_Click(object sender, EventArgs e) {
+            currentPanel.Top = ordersButton.Top;
             ordersUserControl1.BringToFront();
         }
 
         private void dashboardButton_Click(object sender, EventArgs e) {
+            currentPanel.Top = dashboardButton.Top;
             dashboardUserControl1.BringToFront();
         }
 

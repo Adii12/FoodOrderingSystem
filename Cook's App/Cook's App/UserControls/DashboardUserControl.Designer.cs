@@ -64,11 +64,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.dateLabel);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.welcomeLabel);
             this.Name = "DashboardUserControl";
-            this.Size = new System.Drawing.Size(590, 420);
+            this.Size = new System.Drawing.Size(1720, 1060);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Graphicloads-Polygon-Restaurant.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FontAwesome.Sharp, Version=5.12.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.Sharp.5.12.1\lib\net472\FontAwesome.Sharp.dll</HintPath>
@@ -55,6 +58,7 @@
     <Compile Include="CookForm.Designer.cs">
       <DependentUpon>CookForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dummy\DummyClass.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +72,12 @@
     </Compile>
     <Compile Include="UserControls\DashboardUserControl.Designer.cs">
       <DependentUpon>DashboardUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\OrderLayout\ActiveOrderLayout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\OrderLayout\ActiveOrderLayout.Designer.cs">
+      <DependentUpon>ActiveOrderLayout.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\OrderLayout\PendingOrderLayout.cs">
       <SubType>UserControl</SubType>
@@ -100,6 +110,9 @@
     <EmbeddedResource Include="UserControls\DashboardUserControl.resx">
       <DependentUpon>DashboardUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\OrderLayout\ActiveOrderLayout.resx">
+      <DependentUpon>ActiveOrderLayout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\OrderLayout\PendingOrderLayout.resx">
       <DependentUpon>PendingOrderLayout.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,6 +135,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\kisspng-indian-cuisine-fusion-cuisine-french-cuisine-chine-chef-5ab942788d1898.4156712115220906165779.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\monumental-restaurant-logo-cafe-png-favpng-TqN3vfL7Fy95dhWXhFZeThw25.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\monumental-restaurant-logo-cafe-png-favpng-TqN3vfL7Fy95dhWXhFZeThw25 %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kisspng-monumental-restaurant-logo-cafe-5af54f49045985.8762634515260260570178.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Graphicloads-Polygon-Restaurant.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

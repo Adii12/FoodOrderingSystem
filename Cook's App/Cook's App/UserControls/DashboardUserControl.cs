@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Cook_s_App.Dummy;
 
 namespace Cook_s_App.UserControls {
     public partial class DashboardUserControl : UserControl {
         public DashboardUserControl() {
             InitializeComponent();
             StartTimer();
+            welcomeLabel.Text = "Hi, " + DummyClass.COOK_NAME + "!";
         }
         
         private void StartTimer() {

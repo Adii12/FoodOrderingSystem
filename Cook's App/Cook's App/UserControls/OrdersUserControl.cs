@@ -11,18 +11,34 @@ using Cook_s_App.UserControls.OrderLayout;
 
 namespace Cook_s_App.UserControls {
     public partial class OrdersUserControl : UserControl {
+        PendingOrderLayout[] samplePendingOrder;
+        static OrdersUserControl obj;
+
+        public static OrdersUserControl Instance {
+            get {
+                if (obj == null)
+                    obj = new OrdersUserControl();
+                return obj;
+            }
+        }
+
         public OrdersUserControl() {
             InitializeComponent();
-            PendingOrderLayout samplePendingOrder = new PendingOrderLayout();
-            createSampleOrders();
+            obj = this;
+            samplePendingOrder = new PendingOrderLayout[100];
+            createSampleOrders();            
         }
 
         private void createSampleOrders() {
-            for (int i = 0; i < 3; i++) {
-                PendingOrderLayout samplePendingOrder = new PendingOrderLayout();
-                pendingOrdersPanel.Controls.Add(samplePendingOrder);
-                samplePendingOrder.Location = new Point(0, i * 150);
+            for (int i = 0; i < 7; i++) {
+                samplePendingOrder[i] = new PendingOrderLayout(i+1000, "Pizza | Ketchup \n Cola(500ml)");
+                pendingOrdersPanel.Controls.Add(samplePendingOrder[i]);
             }
+        }
+
+        public FlowLayoutPanel activeOrders {
+            get { return activeOrdersPanel; }
+            set { activeOrdersPanel = value; }
         }
     }
 }
