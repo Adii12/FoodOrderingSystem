@@ -9,5 +9,8 @@ namespace Cook_s_App.Dummy {
         public static string USERNAME = "user";
         public static string PASSWORD = "pass";
         public static string COOK_NAME = "Carl Novak";
+
+        public static string ADMIN_USER = "admin";
+        public static string ADMIN_PASS = "admin";
     }
 }

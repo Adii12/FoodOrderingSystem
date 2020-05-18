@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Cook_s_App.Admin;
 using Cook_s_App.Dummy;
 
 namespace Cook_s_App {
@@ -40,7 +41,10 @@ namespace Cook_s_App {
         }
 
         private void label4_Click(object sender, EventArgs e) {
-
+            this.Hide();
+            AdminLoginForm alf = new AdminLoginForm();
+            alf.ShowDialog();
+            
         }
     }
 }
