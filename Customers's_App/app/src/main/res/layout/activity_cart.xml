@@ -3,22 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".menu.MainActivity">
+    android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/colorPrimary"
         app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="#FFFFFF"
+        app:itemTextColor="#F1EAEA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:menu="@menu/menu_navigation"
-        app:itemTextColor="#F1EAEA"
-        app:itemIconTint="#FFFFFF"
-        android:background="@color/colorPrimary"/>
+        app:menu="@menu/menu_navigation" />
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -28,12 +27,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
-    <ListView
-        android:id="@+id/categoriesMenu"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cart Activity"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
