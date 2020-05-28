@@ -15,6 +15,7 @@ import com.adriancimpean.foodorder.menu.MainActivity
 
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONObject
 
 /**
@@ -23,6 +24,7 @@ import org.json.JSONObject
 class LoginFragment : Fragment() {
 
     var data: JSONObject? = null    //for storing json which came from firebase
+    var parse : getUsers? = null
 
     @SuppressLint("StaticFieldLeak")
     inner class getUsers : AsyncTask<Void, Void, String>() {
@@ -33,26 +35,25 @@ class LoginFragment : Fragment() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             data = JSONObject(result)
-
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_login, container, false)
         val loginBtn: Button = view.findViewById(R.id.LoginButton)
         val usernameText = view.findViewById(R.id.usernameText) as EditText
         val passwordText = view.findViewById(R.id.passwordText) as EditText
 
-        val parse = getUsers()
-        parse.execute()
+        parse = getUsers()
+        parse!!.execute()
 
         loginBtn.setOnClickListener {
-            login(usernameText, passwordText)
+            var task = getUsers()
+            task.execute()
+            if(validateInput()) {
+                login(usernameText, passwordText)
+            }
         }
         return view;
     }
@@ -61,9 +62,11 @@ class LoginFragment : Fragment() {
         var dataArr = data!!.toJSONArray(data!!.names())
         var loginOk = false
 
-        for (i in 0 until dataArr.length()) {
+        for (i in 0 until dataArr!!.length()) {
             var username : String = dataArr.getJSONObject(i).get("username").toString()
             var password = dataArr.getJSONObject(i).get("password").toString()
+            println(username)
+            println(password)
             loginOk = false
 
             if (username == usernameText.text.toString() && password == passwordText.text.toString()) {
@@ -73,10 +76,19 @@ class LoginFragment : Fragment() {
         }
 
         if (loginOk) {
-            var intent = Intent(context, MainActivity::class.java)
+            val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
-        }else{
+        } else {
             Toast.makeText(context,"Invalid credentials", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun validateInput() : Boolean{
+        if(usernameText.text.toString() == "" && passwordText.text.toString() == ""){
+            Toast.makeText(context,"Please fill in all boxes", Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        return true
     }
 }

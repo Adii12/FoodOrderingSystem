@@ -1,14 +1,15 @@
 package com.adriancimpean.foodorder.connection
 
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import org.json.JSONObject
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLEncoder
 
 
-class FetchData(){
+class FetchData{
     companion object {
+         //GET
          fun getRequest(targetURL:String) : String{
              val url: URL
              var connection: HttpURLConnection? = null
@@ -52,5 +53,52 @@ class FetchData(){
              }
          }
 
+        //POST
+        fun postRequest(targetURL: String, postData: JSONObject) : String{
+            val url:URL
+            var conn : HttpURLConnection? = null
+
+           return try{
+                url = URL(targetURL)
+                conn=url.openConnection() as HttpURLConnection
+                conn.setRequestProperty("content-type", "application/json; charset=utf-8")
+                conn.setRequestProperty("Content-Language", "en-US")
+                conn.useCaches = false
+                conn.doInput = true
+                conn.doOutput = true
+                conn.requestMethod= "POST"
+
+                val os = conn.outputStream
+                val writer = BufferedWriter(OutputStreamWriter(os,"UTF-8"))
+
+               writer.write(postData.toString())
+                println(postData.toString())
+                writer.flush()
+                writer.close()
+                os.close()
+
+                val responseCode = conn.responseCode
+                println(responseCode)
+                var sb  : StringBuffer? = null
+
+               if(responseCode == HttpURLConnection.HTTP_OK){
+                    val input = BufferedReader(InputStreamReader(conn.inputStream))
+                    sb = StringBuffer("")
+                    var line : String? = ""
+                    while(input.readLine().also { line = it } != null){
+                        sb.append(line)
+                        break
+                    }
+                    input.close()
+                }
+               return responseCode.toString()
+
+           }catch (ex : java.lang.Exception){
+                ex.printStackTrace()
+                ""
+           }finally {
+                conn?.disconnect()
+           }
+        }
     }
 }

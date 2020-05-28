@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         listItems = ArrayList()
 
-        listAdapter = ArrayAdapter(this,R.layout.support_simple_spinner_dropdown_item, listItems!!)
+        listAdapter = ArrayAdapter(this,R.layout.custom_row,R.id.Name, listItems!!)
 
         listView!!.adapter=listAdapter
 
