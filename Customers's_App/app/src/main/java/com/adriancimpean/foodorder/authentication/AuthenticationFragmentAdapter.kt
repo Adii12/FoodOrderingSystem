@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 
 class AuthenticationFragmentAdapter(fragmentManager : FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
 
-     private var fragmentList : ArrayList<Fragment> = ArrayList()
+    private var fragmentList : ArrayList<Fragment> = ArrayList()
 
     override fun getItem(position: Int): Fragment {
         return fragmentList[position]

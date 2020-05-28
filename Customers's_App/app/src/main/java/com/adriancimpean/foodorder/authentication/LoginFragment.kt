@@ -4,17 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.adriancimpean.foodorder.menu.MainActivity
-
+import androidx.fragment.app.Fragment
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.menu.MainActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONObject
 
@@ -63,7 +62,7 @@ class LoginFragment : Fragment() {
         var loginOk = false
 
         for (i in 0 until dataArr!!.length()) {
-            var username : String = dataArr.getJSONObject(i).get("username").toString()
+            var username = dataArr.getJSONObject(i).get("username").toString()
             var password = dataArr.getJSONObject(i).get("password").toString()
             println(username)
             println(password)
@@ -88,7 +87,6 @@ class LoginFragment : Fragment() {
             Toast.makeText(context,"Please fill in all boxes", Toast.LENGTH_LONG).show()
             return false
         }
-
         return true
     }
 }
