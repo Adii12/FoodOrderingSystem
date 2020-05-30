@@ -10,6 +10,10 @@ import androidx.viewpager.widget.ViewPager
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
 import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.menu.categories.BurgersFragment
+import com.adriancimpean.foodorder.menu.categories.DesertsFragment
+import com.adriancimpean.foodorder.menu.categories.DrinksFragment
+import com.adriancimpean.foodorder.menu.categories.PizzasFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import org.json.JSONObject
@@ -59,6 +63,11 @@ class MainActivity : AppCompatActivity() {
         pager = findViewById(R.id.pager)
         tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
 
+        adapter.addFragment(BurgersFragment())
+        adapter.addFragment(DesertsFragment())
+        adapter.addFragment(DrinksFragment())
+        adapter.addFragment(PizzasFragment())
+
         pager!!.adapter=adapter
         pager!!.addOnPageChangeListener(object : TabLayout.TabLayoutOnPageChangeListener(tabLayout){})
 
@@ -93,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-        
+
         getCategories.execute()
     }
 }

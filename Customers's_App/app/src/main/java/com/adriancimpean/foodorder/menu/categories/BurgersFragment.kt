@@ -29,7 +29,7 @@ class BurgersFragment : Fragment() {
     var loader : ProgressBar? = null
 
 
-    inner class getBurgers : AsyncTask<Void,Void,String>(){
+    inner class getBurgers : AsyncTask<Void, Void, String>() {
         override fun onPreExecute() {
             super.onPreExecute()
             loader!!.visibility = View.VISIBLE
@@ -41,9 +41,9 @@ class BurgersFragment : Fragment() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            data = JSONObject(result)
+            data = JSONObject(result!!)
 
-            for(i in 0 until data?.names()!!.length()){
+            for (i in 0 until data?.names()!!.length()) {
                 listItems!!.add(data?.names()!![i].toString())
                 listAdapter!!.notifyDataSetChanged()
             }
@@ -51,6 +51,7 @@ class BurgersFragment : Fragment() {
             loader!!.visibility = View.GONE
         }
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -65,7 +66,7 @@ class BurgersFragment : Fragment() {
 
         list!!.adapter = listAdapter
 
-        var getBurgers = getBurgers()
+        val getBurgers = getBurgers()
         getBurgers.execute()
 
         return view

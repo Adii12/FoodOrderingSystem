@@ -9,17 +9,17 @@ import com.adriancimpean.foodorder.menu.categories.DrinksFragment
 import com.adriancimpean.foodorder.menu.categories.PizzasFragment
 
 class CategoriesFragmentAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager)  {
+    private var fragmentList : ArrayList<Fragment> = ArrayList()
+
     override fun getItem(position: Int): Fragment {
-        return when(position){
-            0 -> BurgersFragment()
-            1 -> PizzasFragment()
-            2 -> DesertsFragment()
-            3 -> DrinksFragment()
-            else -> BurgersFragment()
-        }
+        return fragmentList[position]
     }
 
     override fun getCount(): Int {
-        return 4
+       return fragmentList.size
+    }
+
+    fun addFragment(fragment: Fragment){
+        fragmentList.add(fragment)
     }
 }

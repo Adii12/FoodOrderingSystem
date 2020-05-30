@@ -15,7 +15,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
         pager = findViewById(R.id.pager)
 
-        val pageAdapter : AuthenticationFragmentAdapter = AuthenticationFragmentAdapter(supportFragmentManager)
+        val pageAdapter = AuthenticationFragmentAdapter(supportFragmentManager)
 
         pageAdapter.addFragment(LoginFragment())
         pageAdapter.addFragment(RegisterFragment())
