@@ -1,10 +1,12 @@
-package com.adriancimpean.foodorder.menu
+package com.adriancimpean.foodorder.order
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
+import com.adriancimpean.foodorder.menu.MainActivity
+import com.adriancimpean.foodorder.order.cart.CartActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 

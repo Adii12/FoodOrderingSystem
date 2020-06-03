@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ProgressBar
 
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.order.Item
+import com.adriancimpean.foodorder.menu.ItemListAdapter
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -19,9 +21,10 @@ import org.json.JSONObject
  */
 class DrinksFragment : Fragment() {
    private var list : ListView? = null
-    private var drinksList : ArrayList<String>? = null
-    private var drinksListAdapter : ArrayAdapter<String>? = null
+    private var listItems : ArrayList<Item>? = null
+    private var listAdapter : ItemListAdapter? = null
     private var drinksLoader : ProgressBar? = null
+    private var arrData : JSONArray? = null
     private var data : JSONObject? = null
 
     inner class getDrinks : AsyncTask<Void, Void, String>(){
@@ -36,14 +39,19 @@ class DrinksFragment : Fragment() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            data = JSONObject(result)
+            data = JSONObject(result!!)
+            arrData=data!!.toJSONArray(data!!.names())
 
-            for (i in 0 until data?.names()!!.length()){
-                drinksList!!.add(data?.names()!![i].toString())
-                //println(data?.names()!![i].toString())
-                drinksListAdapter!!.notifyDataSetChanged()
+            for (i in 0 until arrData!!.length()) {
+                var name = data?.names()!![i].toString()
+                var description = arrData!!.getJSONObject(i).get("description").toString()
+                var price = arrData!!.getJSONObject(i).getDouble("price")
+
+                var item = Item(name,description,price)
+
+                listItems!!.add(item)
+                listAdapter!!.notifyDataSetChanged()
             }
-            println(drinksList)
             drinksLoader!!.visibility = View.GONE
         }
     }
@@ -54,11 +62,15 @@ class DrinksFragment : Fragment() {
         list =view.findViewById(R.id.drinksList)
         drinksLoader = view.findViewById(R.id.drinksLoader)
 
-        drinksList = ArrayList()
+        listItems = ArrayList()
 
-        drinksListAdapter = ArrayAdapter(context!! ,R.layout.custom_row, R.id.Name, drinksList!!)
+        listAdapter = ItemListAdapter(
+            context!!,
+            R.layout.custom_menu_list,
+            listItems!!
+        )
 
-        list?.adapter = drinksListAdapter
+        list?.adapter = listAdapter
 
         drinksLoader!!.visibility = View.GONE
 

@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ProgressBar
 
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.order.Item
+import com.adriancimpean.foodorder.menu.ItemListAdapter
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -19,9 +21,10 @@ import org.json.JSONObject
  */
 class DesertsFragment : Fragment() {
     var list : ListView? = null
-    var listItems : ArrayList<String>? = null
-    var adapter : ArrayAdapter<String>? = null
+    var listItems : ArrayList<Item>? = null
+    var listAdapter : ItemListAdapter? = null
     var data : JSONObject? = null
+    var arrData : JSONArray? = null
     var desertsLoader : ProgressBar? = null
 
     inner class getDeserts : AsyncTask<Void, Void, String>(){
@@ -36,13 +39,19 @@ class DesertsFragment : Fragment() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            data = JSONObject(result)
+            data = JSONObject(result!!)
+            arrData=data!!.toJSONArray(data!!.names())
 
-            for(i in 0 until data?.names()!!.length()){
-                listItems!!.add(data?.names()!![i].toString())
-                adapter!!.notifyDataSetChanged()
+            for (i in 0 until arrData!!.length()) {
+                var name = data?.names()!![i].toString()
+                var description = arrData!!.getJSONObject(i).get("description").toString()
+                var price = arrData!!.getJSONObject(i).getDouble("price")
+
+                var item = Item(name,description,price)
+
+                listItems!!.add(item)
+                listAdapter!!.notifyDataSetChanged()
             }
-
             desertsLoader?.visibility = View.GONE
         }
     }
@@ -54,9 +63,13 @@ class DesertsFragment : Fragment() {
         desertsLoader=view.findViewById(R.id.desertsLoader)
         listItems = ArrayList()
 
-       adapter = ArrayAdapter(context!!,R.layout.custom_row,R.id.Name,listItems!!)
+        listAdapter = ItemListAdapter(
+            context!!,
+            R.layout.custom_menu_list,
+            listItems!!
+        )
 
-        list!!.adapter = adapter
+        list!!.adapter = listAdapter
 
         desertsLoader?.visibility = View.GONE
 

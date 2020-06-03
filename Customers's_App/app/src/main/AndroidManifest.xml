@@ -12,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".menu.CartActivity"></activity>
-        <activity android:name=".menu.OrdersActivity" />
+        <activity android:name=".order.cart.CartActivity"></activity>
+        <activity android:name=".order.OrdersActivity" />
         <activity android:name=".authentication.AuthenticationActivity"
             android:windowSoftInputMode="stateVisible|adjustPan">
             <intent-filter>

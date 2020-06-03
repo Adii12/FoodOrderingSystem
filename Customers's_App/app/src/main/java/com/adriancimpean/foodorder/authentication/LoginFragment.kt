@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
 import com.adriancimpean.foodorder.menu.MainActivity
+import com.adriancimpean.foodorder.order.cart.Cart
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONObject
 
@@ -43,6 +44,8 @@ class LoginFragment : Fragment() {
         val loginBtn: Button = view.findViewById(R.id.LoginButton)
         val usernameText = view.findViewById(R.id.usernameText) as EditText
         val passwordText = view.findViewById(R.id.passwordText) as EditText
+
+        Cart.resetCart()
 
         parse = getUsers()
         parse!!.execute()

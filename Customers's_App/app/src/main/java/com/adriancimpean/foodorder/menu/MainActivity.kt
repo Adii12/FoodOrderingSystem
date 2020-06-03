@@ -14,6 +14,8 @@ import com.adriancimpean.foodorder.menu.categories.BurgersFragment
 import com.adriancimpean.foodorder.menu.categories.DesertsFragment
 import com.adriancimpean.foodorder.menu.categories.DrinksFragment
 import com.adriancimpean.foodorder.menu.categories.PizzasFragment
+import com.adriancimpean.foodorder.order.cart.CartActivity
+import com.adriancimpean.foodorder.order.OrdersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import org.json.JSONObject

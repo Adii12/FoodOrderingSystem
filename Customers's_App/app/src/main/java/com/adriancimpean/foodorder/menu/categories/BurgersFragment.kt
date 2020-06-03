@@ -1,21 +1,19 @@
 package com.adriancimpean.foodorder.menu.categories
 
-import android.opengl.Visibility
 import android.os.AsyncTask
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ProgressBar
 
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.loader
-import kotlinx.android.synthetic.main.fragment_burgers.*
+import com.adriancimpean.foodorder.order.Item
+import com.adriancimpean.foodorder.menu.ItemListAdapter
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -23,9 +21,10 @@ import org.json.JSONObject
  */
 class BurgersFragment : Fragment() {
     var list : ListView? = null
-    var listItems : ArrayList<String>? = null
-    var listAdapter : ArrayAdapter<String>? = null
+    var listItems : ArrayList<Item>? = null
+    var listAdapter : ItemListAdapter? = null
     var data : JSONObject? = null
+    var arrData : JSONArray? = null
     var loader : ProgressBar? = null
 
 
@@ -42,9 +41,16 @@ class BurgersFragment : Fragment() {
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             data = JSONObject(result!!)
+            arrData=data!!.toJSONArray(data!!.names())
 
-            for (i in 0 until data?.names()!!.length()) {
-                listItems!!.add(data?.names()!![i].toString())
+            for (i in 0 until arrData!!.length()) {
+                var name = data?.names()!![i].toString()
+                var description = arrData!!.getJSONObject(i).get("description").toString()
+                var price = arrData!!.getJSONObject(i).getDouble("price")
+
+                var item = Item(name,description,price)
+
+                listItems!!.add(item)
                 listAdapter!!.notifyDataSetChanged()
             }
 
@@ -62,7 +68,11 @@ class BurgersFragment : Fragment() {
         list = view.findViewById(R.id.burgersList)
 
         listItems = ArrayList()
-        listAdapter = ArrayAdapter(context!!,R.layout.custom_row, R.id.Name, listItems!!)
+        listAdapter = ItemListAdapter(
+            context!!,
+            R.layout.custom_menu_list,
+            listItems!!
+        )
 
         list!!.adapter = listAdapter
 
