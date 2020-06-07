@@ -18,7 +18,7 @@ import org.json.JSONObject
  * A simple [Fragment] subclass.
  */
 class RegisterFragment : Fragment() {
-    val RESPONSE_OK = "200"
+    private val RESPONSE_OK = "200"
 
     private var registerButton : Button? = null
     private var firstNameText : EditText? = null
@@ -34,21 +34,22 @@ class RegisterFragment : Fragment() {
 
     var user : JSONObject? = null
 
-    inner class registerUser : AsyncTask<Void, Void, String>(){
+
+    inner class registerUser : AsyncTask<Void, Void, String>() {
         override fun doInBackground(vararg p0: Void?): String {
             return FetchData.postRequest("https://food-order-bbcce.firebaseio.com/Users.json", user!!)
         }
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            if(result != RESPONSE_OK)
-                Toast.makeText(context,"Error registering user", Toast.LENGTH_SHORT).show()
-            else{
-                Toast.makeText(context,"Successfully Registered!", Toast.LENGTH_SHORT).show()
-
+            if (result != RESPONSE_OK)
+                Toast.makeText(context, "Error registering user", Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(context, "Successfully Registered!", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -104,6 +105,4 @@ class RegisterFragment : Fragment() {
         }
         return true
     }
-
-
 }

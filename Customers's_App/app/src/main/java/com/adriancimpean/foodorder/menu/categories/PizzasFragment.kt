@@ -20,12 +20,12 @@ import org.json.JSONObject
  * A simple [Fragment] subclass.
  */
 class PizzasFragment : Fragment() {
-    var list : ListView? = null
-    var pizzaLoader : ProgressBar? = null
-    var listItems : ArrayList<Item>? = null
-    var listAdapter : ItemListAdapter? = null
-    var data : JSONObject? = null
-    var arrData : JSONArray? = null
+    private var list : ListView? = null
+    private var pizzaLoader : ProgressBar? = null
+    private var listItems : ArrayList<Item>? = null
+    private var listAdapter : ItemListAdapter? = null
+    private var data : JSONObject? = null
+    private var arrData : JSONArray? = null
 
     inner class getPizzas : AsyncTask<Void, Void, String>(){
         override fun onPreExecute() {
@@ -52,7 +52,6 @@ class PizzasFragment : Fragment() {
                 listItems!!.add(item)
                 listAdapter!!.notifyDataSetChanged()
             }
-
             pizzaLoader?.visibility = View.GONE
         }
     }
@@ -64,11 +63,7 @@ class PizzasFragment : Fragment() {
         pizzaLoader= view.findViewById(R.id.pizzasLoader)
 
         listItems = ArrayList()
-        listAdapter = ItemListAdapter(
-            context!!,
-            R.layout.custom_menu_list,
-            listItems!!
-        )
+        listAdapter = ItemListAdapter(context!!, R.layout.custom_menu_list, listItems!!)
 
         list?.adapter=listAdapter
 

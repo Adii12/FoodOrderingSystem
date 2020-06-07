@@ -1,23 +1,48 @@
 package com.adriancimpean.foodorder.order
 
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ListView
+import android.widget.ProgressBar
+import com.adriancimpean.foodorder.CurrentUser
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
+import com.adriancimpean.foodorder.connection.FetchData
 import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.cart.CartActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 class OrdersActivity : AppCompatActivity() {
     private var bottomNav : BottomNavigationView? = null
+    private var ordersList : ListView? = null
+    private var listItems : ArrayList<Order>? = null
+    private var listAdapter : OrderListAdapter? = null
+    private var loader : ProgressBar? = null
+    private var orderItems : ArrayList<String>? = null
+    var data : JSONObject? = null
+    var arrData : JSONArray? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_orders)
         bottomNav=findViewById(R.id.bottomNav)
         bottomNav!!.selectedItemId = R.id.Orders
+        loader = findViewById(R.id.orderLoader)
+
+        ordersList = findViewById(R.id.ordersList)
+        listItems = ArrayList()
+
+        listAdapter = OrderListAdapter(this@OrdersActivity, R.layout.custom_order_list, listItems!!)
+        ordersList!!.adapter=listAdapter
+
+        val getUsersOrders = getUsersOrders()
+        getUsersOrders.execute()
 
         bottomNav!!.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -33,10 +58,42 @@ class OrdersActivity : AppCompatActivity() {
                     startActivity(Intent(this,  AuthenticationActivity::class.java))
                     overridePendingTransition(0,0)
                 }
-
             }
             true
+        }
+    }
 
+    inner class getUsersOrders : AsyncTask<Void,Void,String>(){
+        override fun onPreExecute() {
+            loader!!.visibility = View.VISIBLE
+        }
+
+        override fun doInBackground(vararg p0: Void?): String {
+            return FetchData.getRequest("https://food-order-bbcce.firebaseio.com/Orders.json")
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            data = JSONObject(result!!)
+            arrData = data!!.toJSONArray(data!!.names())
+            orderItems = ArrayList()
+
+            for(i in 0 until arrData!!.length()){
+                var orderUserID = arrData!!.getJSONObject(i).get("user id")
+                println(orderUserID)
+                if(orderUserID == CurrentUser.user_id){
+                    for(j in 0 until arrData!!.getJSONObject(i).getJSONArray("Items").length()) {
+                        orderItems!!.add(arrData!!.getJSONObject(i).getJSONArray("Items").getString(j))
+                        println(orderItems)
+                    }
+
+                    var price = arrData!!.getJSONObject(i).getDouble("Price")
+                    var userOrder = Order(data!!.names()!![i].toString(), orderItems!!, price)
+                    listItems!!.add(userOrder)
+                    listAdapter!!.notifyDataSetChanged()
+                }
+            }
+            loader!!.visibility = View.GONE
         }
     }
 }

@@ -10,10 +10,7 @@ import androidx.viewpager.widget.ViewPager
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
 import com.adriancimpean.foodorder.connection.FetchData
-import com.adriancimpean.foodorder.menu.categories.BurgersFragment
-import com.adriancimpean.foodorder.menu.categories.DesertsFragment
-import com.adriancimpean.foodorder.menu.categories.DrinksFragment
-import com.adriancimpean.foodorder.menu.categories.PizzasFragment
+import com.adriancimpean.foodorder.menu.categories.*
 import com.adriancimpean.foodorder.order.cart.CartActivity
 import com.adriancimpean.foodorder.order.OrdersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +24,10 @@ class MainActivity : AppCompatActivity() {
     private var loader : ProgressBar? = null
     private var pager : ViewPager? = null
     private var tabLayout : TabLayout? = null
-    private var adapter = CategoriesFragmentAdapter(supportFragmentManager)
+    private var adapter =
+        CategoriesFragmentAdapter(
+            supportFragmentManager
+        )
 
     inner class getCategories : AsyncTask<Void,Void,String>(){
         override fun onPreExecute() {

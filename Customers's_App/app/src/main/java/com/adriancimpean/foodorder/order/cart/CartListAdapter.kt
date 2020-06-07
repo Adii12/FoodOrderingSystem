@@ -36,8 +36,8 @@ class CartListAdapter : ArrayAdapter<Item> {
         price?.text = itemPrice.toString()+"ron"
 
         removeButton!!.setOnClickListener {
-            var item = Item(itemName, itemDescription, itemPrice)
-            Cart.removeFromCart(item)
+            //var item = Item(itemName, itemDescription, itemPrice)
+            //Cart.removeFromCart(item)
             println("Adapter - removed")
         }
         return retView

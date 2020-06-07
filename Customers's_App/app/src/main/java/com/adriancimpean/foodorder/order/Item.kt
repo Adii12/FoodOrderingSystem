@@ -1,5 +1,7 @@
 package com.adriancimpean.foodorder.order
 
+import org.json.JSONObject
+
 class Item {
 
     var Name : String? = null
@@ -11,6 +13,4 @@ class Item {
         this.Description = Description
         this.Price = Price
     }
-
-
 }

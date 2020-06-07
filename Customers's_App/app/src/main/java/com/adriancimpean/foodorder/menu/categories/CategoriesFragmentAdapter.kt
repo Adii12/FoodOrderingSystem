@@ -1,4 +1,4 @@
-package com.adriancimpean.foodorder.menu
+package com.adriancimpean.foodorder.menu.categories
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

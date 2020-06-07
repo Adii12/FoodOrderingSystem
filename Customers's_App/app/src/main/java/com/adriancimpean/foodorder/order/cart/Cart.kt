@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.Item
+import org.json.JSONArray
+import org.json.JSONObject
 
 object Cart {
     private var cartItems : ArrayList<Item>? = ArrayList()
@@ -35,4 +37,5 @@ object Cart {
     fun resetCart(){
         cartItems!!.clear()
     }
+
 }

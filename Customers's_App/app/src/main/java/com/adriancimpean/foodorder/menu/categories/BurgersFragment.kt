@@ -68,11 +68,7 @@ class BurgersFragment : Fragment() {
         list = view.findViewById(R.id.burgersList)
 
         listItems = ArrayList()
-        listAdapter = ItemListAdapter(
-            context!!,
-            R.layout.custom_menu_list,
-            listItems!!
-        )
+        listAdapter = ItemListAdapter(context!!, R.layout.custom_menu_list, listItems!!)
 
         list!!.adapter = listAdapter
 

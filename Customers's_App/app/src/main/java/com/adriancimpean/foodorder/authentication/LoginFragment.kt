@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.adriancimpean.foodorder.CurrentUser
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.FetchData
 import com.adriancimpean.foodorder.menu.MainActivity
@@ -67,12 +68,23 @@ class LoginFragment : Fragment() {
         for (i in 0 until dataArr!!.length()) {
             var username = dataArr.getJSONObject(i).get("username").toString()
             var password = dataArr.getJSONObject(i).get("password").toString()
-            println(username)
-            println(password)
+
+
             loginOk = false
 
             if (username == usernameText.text.toString() && password == passwordText.text.toString()) {
                 loginOk = true
+
+                var firstName = dataArr.getJSONObject(i).get("first name").toString()
+                var lastName = dataArr.getJSONObject(i).get("last name").toString()
+                var city = dataArr.getJSONObject(i).get("city").toString()
+                var county = dataArr.getJSONObject(i).get("county").toString()
+                var streetName = dataArr.getJSONObject(i).get("street").toString()
+                var streetNo = dataArr.getJSONObject(i).get("number").toString()
+                var phoneNo = dataArr.getJSONObject(i).get("phone number").toString()
+                var user_id = data!!.names()!![i]
+
+                CurrentUser.setData(firstName, lastName, username, city, county, streetName, streetNo, phoneNo, user_id as String)
                 break
             }
         }
@@ -80,6 +92,7 @@ class LoginFragment : Fragment() {
         if (loginOk) {
             val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
+
         } else {
             Toast.makeText(context,"Invalid credentials", Toast.LENGTH_LONG).show()
         }
