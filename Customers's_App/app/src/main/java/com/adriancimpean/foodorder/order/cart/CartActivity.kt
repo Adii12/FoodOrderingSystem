@@ -13,6 +13,7 @@ import com.adriancimpean.foodorder.authentication.AuthenticationActivity
 import com.adriancimpean.foodorder.connection.FetchData
 import com.adriancimpean.foodorder.menu.ItemListAdapter
 import com.adriancimpean.foodorder.menu.MainActivity
+import com.adriancimpean.foodorder.order.ConfirmOrderActivity
 import com.adriancimpean.foodorder.order.Item
 import com.adriancimpean.foodorder.order.OrdersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,8 +22,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class CartActivity : AppCompatActivity() {
-
-    private val RESPONSE_OK = "200"
 
     private var bottomNav : BottomNavigationView? = null
     private var cartItems : ArrayList<Item>? = null
@@ -47,7 +46,9 @@ class CartActivity : AppCompatActivity() {
         listAdapter?.notifyDataSetChanged()
 
         sendOrderButton!!.setOnClickListener {
-            placeOrder()
+            //placeOrder()
+            var intent = Intent(this@CartActivity, ConfirmOrderActivity::class.java)
+            startActivity(intent)
         }
 
         bottomNav=findViewById(R.id.bottomNav)
@@ -75,43 +76,5 @@ class CartActivity : AppCompatActivity() {
         }
     }
 
-    private fun placeOrder(){
-        var orderItems = JSONObject()
-        var orderArr = JSONArray()
 
-        for(i in 0 until cartItems!!.size) {
-            orderArr.put(i, cartItems!![i].Name.toString())
-        }
-
-        orderItems.put("Items", orderArr)
-        orderItems.put("first name", CurrentUser.firstName)
-        orderItems.put("last name", CurrentUser.lastName)
-        orderItems.put("city", CurrentUser.city)
-        orderItems.put("county", CurrentUser.county)
-        orderItems.put("street name", CurrentUser.streetName)
-        orderItems.put("street no", CurrentUser.streetNo)
-        orderItems.put("phone number", CurrentUser.phoneNo)
-        orderItems.put("user id", CurrentUser.user_id)
-        orderItems.put("Price", Cart.getTotalPrice().toString())
-        orderItems.put("status", "Pending")
-
-        println(orderItems)
-        var sendOrder = sendOrder()
-        sendOrder.execute(orderItems)
-    }
-
-    inner class sendOrder : AsyncTask <JSONObject, Void, String>(){
-        override fun doInBackground(vararg jobj: JSONObject?): String {
-            return FetchData.postRequest("https://food-order-bbcce.firebaseio.com/Orders.json", jobj[0]!!)
-        }
-
-        override fun onPostExecute(result: String?) {
-            if(result==RESPONSE_OK) {
-                Toast.makeText(this@CartActivity, "Order placed successfully", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                Toast.makeText(this@CartActivity, "Error placing your order", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 }

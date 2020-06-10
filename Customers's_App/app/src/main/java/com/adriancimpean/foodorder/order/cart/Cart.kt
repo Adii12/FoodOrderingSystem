@@ -37,5 +37,4 @@ object Cart {
     fun resetCart(){
         cartItems!!.clear()
     }
-
 }
