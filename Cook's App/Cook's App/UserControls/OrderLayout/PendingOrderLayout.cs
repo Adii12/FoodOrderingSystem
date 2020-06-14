@@ -12,9 +12,9 @@ namespace Cook_s_App.UserControls.OrderLayout {
     public partial class PendingOrderLayout : UserControl {
         public String details;
        
-        public PendingOrderLayout(int orderNumber, String details) {
+        public PendingOrderLayout(String orderNumber, String details) {
             InitializeComponent();
-            orderNumberLabel.Text = "#"+orderNumber.ToString();
+            orderNumberLabel.Text = "#"+orderNumber;
             detailsLabel.Text = details;
         }
             
