@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.widget.*
 import com.adriancimpean.foodorder.CurrentUser
 import com.adriancimpean.foodorder.R
-import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.connection.ConnectionHandler
 import com.adriancimpean.foodorder.order.cart.Cart
 import com.adriancimpean.foodorder.order.cart.CartListAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_confirm_order.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.ConnectException
 
 class ConfirmOrderActivity : AppCompatActivity() {
     private val RESPONSE_OK = "200"
@@ -82,14 +84,17 @@ class ConfirmOrderActivity : AppCompatActivity() {
         orderItems.put("Price", Cart.getTotalPrice().toString())
         orderItems.put("status", "Pending")
 
-        println(orderItems)
-        var sendOrder = sendOrder()
-        sendOrder.execute(orderItems)
+        if(ConnectionHandler.isNetworkAvailable(this)) {
+            var sendOrder = sendOrder()
+            sendOrder.execute(orderItems)
+        } else {
+            Snackbar.make(window.decorView.rootView, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     inner class sendOrder : AsyncTask<JSONObject, Void, String>(){
         override fun doInBackground(vararg jobj: JSONObject?): String {
-            return FetchData.postRequest("https://food-order-bbcce.firebaseio.com/Orders.json", jobj[0]!!)
+            return ConnectionHandler.postRequest("https://food-order-bbcce.firebaseio.com/Orders.json", jobj[0]!!)
         }
 
         override fun onPostExecute(result: String?) {

@@ -42,7 +42,7 @@ class ItemListAdapter : ArrayAdapter<Item> {
         addButton!!.setOnClickListener {
             var item = Item(itemName,itemDescription,itemPrice)
             Cart.addToCart(item)
-            Toast.makeText(context,"Succesfully added to cart", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"$itemName successfully added to cart", Toast.LENGTH_SHORT).show()
         }
 
         return retView

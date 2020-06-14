@@ -5,15 +5,17 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
-import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.connection.ConnectionHandler
 import com.adriancimpean.foodorder.menu.categories.*
 import com.adriancimpean.foodorder.order.cart.CartActivity
 import com.adriancimpean.foodorder.order.OrdersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import org.json.JSONObject
 
@@ -21,22 +23,13 @@ class MainActivity : AppCompatActivity() {
 
     private var bottomNav : BottomNavigationView? = null
     private var data : JSONObject? = null
-    private var loader : ProgressBar? = null
     private var pager : ViewPager? = null
     private var tabLayout : TabLayout? = null
-    private var adapter =
-        CategoriesFragmentAdapter(
-            supportFragmentManager
-        )
+    private var adapter = CategoriesFragmentAdapter(supportFragmentManager)
 
     inner class getCategories : AsyncTask<Void,Void,String>(){
-        override fun onPreExecute() {
-            super.onPreExecute()
-            loader!!.visibility=View.VISIBLE
-        }
-
         override fun doInBackground(vararg p0: Void?): String {
-            return FetchData.getRequest("https://food-order-bbcce.firebaseio.com/Categories.json")
+            return ConnectionHandler.getRequest("https://food-order-bbcce.firebaseio.com/Categories.json")
         }
 
         override fun onPostExecute(result: String?) {
@@ -47,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             for(i in 0 until data?.names()!!.length()){
                 tabLayout!!.addTab(tabLayout?.newTab()!!.setText(data?.names()!![i].toString()))
             }
-            loader!!.visibility=View.GONE
         }
     }
 
@@ -55,13 +47,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var getCategories = getCategories()
-
-        loader = findViewById(R.id.loader)
         bottomNav = findViewById(R.id.bottomNav)
         tabLayout = findViewById(R.id.tabLayout)
 
-        loader!!.visibility= View.GONE
         pager = findViewById(R.id.pager)
         tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
 
@@ -105,6 +93,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        getCategories.execute()
+        if(ConnectionHandler.isNetworkAvailable(this)) {
+            var getCategories = getCategories()
+            getCategories.execute()
+        } else {
+            Snackbar.make(window.decorView.rootView, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
+        }
     }
 }

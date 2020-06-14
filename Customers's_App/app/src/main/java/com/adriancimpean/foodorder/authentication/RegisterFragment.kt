@@ -11,7 +11,8 @@ import android.widget.EditText
 import android.widget.Toast
 
 import com.adriancimpean.foodorder.R
-import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.connection.ConnectionHandler
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 
 /**
@@ -33,24 +34,6 @@ class RegisterFragment : Fragment() {
     private var streetNoText : EditText? = null
 
     var user : JSONObject? = null
-
-
-    inner class registerUser : AsyncTask<Void, Void, String>() {
-        override fun doInBackground(vararg p0: Void?): String {
-            return FetchData.postRequest("https://food-order-bbcce.firebaseio.com/Users.json", user!!)
-        }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            if (result != RESPONSE_OK)
-                Toast.makeText(context, "Error registering user", Toast.LENGTH_SHORT).show()
-            else {
-                Toast.makeText(context, "Successfully Registered!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -81,8 +64,12 @@ class RegisterFragment : Fragment() {
                 user!!.put("street", streetNameText!!.text.toString())
                 user!!.put("number", streetNoText!!.text.toString())
 
-                val registerUser = registerUser()
-                registerUser.execute()
+                if(ConnectionHandler.isNetworkAvailable(context!!)) {
+                    val registerUser = registerUser()
+                    registerUser.execute()
+                }else {
+                    Snackbar.make(view, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
         return view
@@ -104,5 +91,20 @@ class RegisterFragment : Fragment() {
             return false
         }
         return true
+    }
+
+    inner class registerUser : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg p0: Void?): String {
+            return ConnectionHandler.postRequest("https://food-order-bbcce.firebaseio.com/Users.json", user!!)
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            if (result != RESPONSE_OK)
+                Toast.makeText(context, "Error registering user", Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(context, "Successfully Registered!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

@@ -7,13 +7,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.adriancimpean.foodorder.CurrentUser
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
-import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.connection.ConnectionHandler
 import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.cart.CartActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -41,8 +43,13 @@ class OrdersActivity : AppCompatActivity() {
         listAdapter = OrderListAdapter(this@OrdersActivity, R.layout.custom_order_list, listItems!!)
         ordersList!!.adapter=listAdapter
 
-        val getUsersOrders = getUsersOrders()
-        getUsersOrders.execute()
+        if(ConnectionHandler.isNetworkAvailable(this)) {
+            val getUsersOrders = getUsersOrders()
+            getUsersOrders.execute()
+        } else {
+            //Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+            Snackbar.make(window.decorView.rootView, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
+        }
 
         bottomNav!!.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -69,7 +76,7 @@ class OrdersActivity : AppCompatActivity() {
         }
 
         override fun doInBackground(vararg p0: Void?): String {
-            return FetchData.getRequest("https://food-order-bbcce.firebaseio.com/Orders.json")
+            return ConnectionHandler.getRequest("https://food-order-bbcce.firebaseio.com/Orders.json")
         }
 
         override fun onPostExecute(result: String?) {

@@ -32,6 +32,7 @@ object Cart {
         cartItems!!.remove(item)
         println("Cart - removed")
         totalPrice-=item.Price!!
+
     }
 
     fun resetCart(){

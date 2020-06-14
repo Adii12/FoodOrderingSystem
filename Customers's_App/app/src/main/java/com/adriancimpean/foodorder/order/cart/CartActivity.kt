@@ -1,32 +1,25 @@
 package com.adriancimpean.foodorder.order.cart
 
 import android.content.Intent
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
-import com.adriancimpean.foodorder.CurrentUser
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.authentication.AuthenticationActivity
-import com.adriancimpean.foodorder.connection.FetchData
-import com.adriancimpean.foodorder.menu.ItemListAdapter
 import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.ConfirmOrderActivity
 import com.adriancimpean.foodorder.order.Item
 import com.adriancimpean.foodorder.order.OrdersActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.json.JSONArray
-import org.json.JSONObject
 
 class CartActivity : AppCompatActivity() {
 
     private var bottomNav : BottomNavigationView? = null
     private var cartItems : ArrayList<Item>? = null
     private var cartListView : ListView? = null
-    private var listAdapter : CartListAdapter? = null
+    var listAdapter : CartListAdapter? = null
     private var totalCost : TextView? = null
     private var sendOrderButton : FloatingActionButton? = null
 
@@ -46,9 +39,8 @@ class CartActivity : AppCompatActivity() {
         listAdapter?.notifyDataSetChanged()
 
         sendOrderButton!!.setOnClickListener {
-            //placeOrder()
-            var intent = Intent(this@CartActivity, ConfirmOrderActivity::class.java)
-            startActivity(intent)
+            var cartActivity = Intent(this@CartActivity, ConfirmOrderActivity::class.java)
+            startActivity(cartActivity)
         }
 
         bottomNav=findViewById(R.id.bottomNav)
@@ -72,9 +64,6 @@ class CartActivity : AppCompatActivity() {
                 }
             }
             true
-
         }
     }
-
-
 }

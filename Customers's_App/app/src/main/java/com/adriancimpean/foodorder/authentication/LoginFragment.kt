@@ -13,9 +13,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.adriancimpean.foodorder.CurrentUser
 import com.adriancimpean.foodorder.R
-import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.connection.ConnectionHandler
 import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.cart.Cart
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONObject
 
@@ -27,17 +28,6 @@ class LoginFragment : Fragment() {
     var data: JSONObject? = null    //for storing json which came from firebase
     var parse : getUsers? = null
 
-    @SuppressLint("StaticFieldLeak")
-    inner class getUsers : AsyncTask<Void, Void, String>() {
-        override fun doInBackground(vararg p0: Void?): String {
-            return FetchData.getRequest("https://food-order-bbcce.firebaseio.com/Users.json")
-        }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            data = JSONObject(result)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -46,17 +36,26 @@ class LoginFragment : Fragment() {
         val usernameText = view.findViewById(R.id.usernameText) as EditText
         val passwordText = view.findViewById(R.id.passwordText) as EditText
 
+        if(ConnectionHandler.isNetworkAvailable(context!!)) {
+            parse = getUsers()
+            parse!!.execute()
+        } else {
+            Toast.makeText(context!!, R.string.no_internet, Toast.LENGTH_SHORT).show()
+        }
+
         Cart.resetCart()
 
-        parse = getUsers()
-        parse!!.execute()
-
         loginBtn.setOnClickListener {
-            var task = getUsers()
-            task.execute()
-            if(validateInput()) {
-                login(usernameText, passwordText)
-            }
+               if(ConnectionHandler.isNetworkAvailable(context!!)) {
+                   val task = getUsers()
+                   task.execute()
+
+                   if (validateInput()) {
+                       login(usernameText, passwordText)
+                   }
+               }else {
+                   Snackbar.make(view, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
+               }
         }
         return view;
     }
@@ -105,4 +104,16 @@ class LoginFragment : Fragment() {
         }
         return true
     }
+
+    inner class getUsers : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg p0: Void?): String {
+            return ConnectionHandler.getRequest("https://food-order-bbcce.firebaseio.com/Users.json")
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            data = JSONObject(result)
+        }
+    }
+
 }

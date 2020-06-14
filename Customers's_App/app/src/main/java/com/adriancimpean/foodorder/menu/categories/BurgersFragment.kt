@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.Toast
 
 import com.adriancimpean.foodorder.R
-import com.adriancimpean.foodorder.connection.FetchData
+import com.adriancimpean.foodorder.connection.ConnectionHandler
 import com.adriancimpean.foodorder.order.Item
 import com.adriancimpean.foodorder.menu.ItemListAdapter
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -27,6 +29,28 @@ class BurgersFragment : Fragment() {
     var arrData : JSONArray? = null
     var loader : ProgressBar? = null
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_burgers, container, false)
+        loader = view.findViewById(R.id.loader)
+        loader!!.visibility = View.GONE
+
+        list = view.findViewById(R.id.burgersList)
+
+        listItems = ArrayList()
+        listAdapter = ItemListAdapter(context!!, R.layout.custom_menu_list, listItems!!)
+
+        list!!.adapter = listAdapter
+
+        if(ConnectionHandler.isNetworkAvailable(context!!)) {
+            val getBurgers = getBurgers()
+            getBurgers.execute()
+        }else{
+            Snackbar.make(view, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
+        }
+
+        return view
+    }
 
     inner class getBurgers : AsyncTask<Void, Void, String>() {
         override fun onPreExecute() {
@@ -35,7 +59,7 @@ class BurgersFragment : Fragment() {
         }
 
         override fun doInBackground(vararg p0: Void?): String {
-            return FetchData.getRequest("https://food-order-bbcce.firebaseio.com/Categories/Burgers.json")
+            return ConnectionHandler.getRequest("https://food-order-bbcce.firebaseio.com/Categories/Burgers.json")
         }
 
         override fun onPostExecute(result: String?) {
@@ -57,25 +81,4 @@ class BurgersFragment : Fragment() {
             loader!!.visibility = View.GONE
         }
     }
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_burgers, container, false)
-        loader = view.findViewById(R.id.loader)
-        loader!!.visibility = View.GONE
-
-        list = view.findViewById(R.id.burgersList)
-
-        listItems = ArrayList()
-        listAdapter = ItemListAdapter(context!!, R.layout.custom_menu_list, listItems!!)
-
-        list!!.adapter = listAdapter
-
-        val getBurgers = getBurgers()
-        getBurgers.execute()
-
-        return view
-    }
-
 }
