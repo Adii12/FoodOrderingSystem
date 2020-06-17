@@ -29,8 +29,7 @@ class CartListAdapter : ArrayAdapter<Item> {
         var itemDescription = getItem(position)?.Description
         var itemPrice = getItem(position)?.Price
 
-        val retView: View =
-            LayoutInflater.from(mContext).inflate(R.layout.custom_cart_list, parent, false)
+        val retView: View = LayoutInflater.from(mContext).inflate(R.layout.custom_cart_list, parent, false)
 
         var nameText = retView.findViewById(R.id.itemNameText) as? TextView
         var description = retView.findViewById(R.id.itemDescriptionText) as? TextView
