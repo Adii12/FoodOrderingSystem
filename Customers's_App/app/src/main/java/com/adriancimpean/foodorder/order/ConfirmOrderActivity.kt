@@ -2,7 +2,6 @@ package com.adriancimpean.foodorder.order
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Address
 import android.location.Location
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
@@ -11,11 +10,10 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.adriancimpean.foodorder.CurrentUser
-import com.adriancimpean.foodorder.Location.AddressHandler
-import com.adriancimpean.foodorder.Location.LocationHandler
+import com.adriancimpean.foodorder.location.AddressHandler
+import com.adriancimpean.foodorder.location.LocationHandler
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.ConnectionHandler
-import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.cart.Cart
 import com.adriancimpean.foodorder.order.cart.CartListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,7 +21,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_confirm_order.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.net.ConnectException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
