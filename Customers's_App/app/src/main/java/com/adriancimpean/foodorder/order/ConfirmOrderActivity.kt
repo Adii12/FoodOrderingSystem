@@ -1,22 +1,39 @@
 package com.adriancimpean.foodorder.order
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Location
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.adriancimpean.foodorder.CurrentUser
+import com.adriancimpean.foodorder.Location.AddressHandler
+import com.adriancimpean.foodorder.Location.LocationHandler
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.ConnectionHandler
+import com.adriancimpean.foodorder.menu.MainActivity
 import com.adriancimpean.foodorder.order.cart.Cart
 import com.adriancimpean.foodorder.order.cart.CartListAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_confirm_order.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.ConnectException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ConfirmOrderActivity : AppCompatActivity() {
     private val RESPONSE_OK = "200"
+    private var loc: Location? = null
+    private var latitude : Double? = null
+    private var longitude : Double? = null
+    private var addressHandler : AddressHandler? = null
 
     private var orderListView : ListView? = null
     private var cityEditText : EditText? = null
@@ -26,6 +43,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
     private var phoneNoText : EditText? = null
     private var sendButton : Button? = null
     private var cancelButton : Button? = null
+    private var getAddressButton : FloatingActionButton? = null
 
     private var listItems : ArrayList<Item>? = null
     private var adapter : CartListAdapter? = null
@@ -42,6 +60,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
         phoneNoText = findViewById(R.id.phoneNumberEditText)
         sendButton = findViewById(R.id.sendButton)
         cancelButton = findViewById(R.id.cancelButton)
+        getAddressButton = findViewById(R.id.getAdressButton)
 
         cityEditText!!.setText(CurrentUser.city)
         countyEditText!!.setText(CurrentUser.county)
@@ -62,6 +81,31 @@ class ConfirmOrderActivity : AppCompatActivity() {
         sendButton!!.setOnClickListener {
             placeOrder()
         }
+
+        getAddressButton!!.setOnClickListener {
+            var location = LocationHandler(this@ConfirmOrderActivity, this@ConfirmOrderActivity)
+            addressHandler = AddressHandler(this@ConfirmOrderActivity)
+
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this@ConfirmOrderActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 50);
+            }
+
+            latitude = location.getLatitutde()
+            longitude = location.getLongitude()
+
+            //Toast.makeText(this@ConfirmOrderActivity, "LAT= $latitude \nLON= $longitude", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this@ConfirmOrderActivity,address?.getAdresses(latitude, longitude),Toast.LENGTH_SHORT).show()
+
+            var address = addressHandler?.getAdresses(latitude, longitude)
+
+            cityEditText!!.setText(address?.locality)
+            countyEditText!!.setText(address?.adminArea)
+           println(address?.thoroughfare)
+            println(address?.subThoroughfare)
+            println(address?.featureName)
+
+            Toast.makeText(this@ConfirmOrderActivity, address?.getAddressLine(0), Toast.LENGTH_LONG).show();
+        }
     }
 
     private fun placeOrder(){
@@ -71,6 +115,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
         for(i in 0 until listItems!!.size) {
             orderArr.put(i, listItems!![i].Name.toString())
         }
+
 
         orderItems.put("Items", orderArr)
         orderItems.put("first name", CurrentUser.firstName)
@@ -83,6 +128,10 @@ class ConfirmOrderActivity : AppCompatActivity() {
         orderItems.put("user id", CurrentUser.user_id)
         orderItems.put("Price", Cart.getTotalPrice().toString())
         orderItems.put("status", "Pending")
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy - hh:mm")
+        val currentDate = sdf.format(Date())
+        orderItems.put("date", currentDate)
 
         if(ConnectionHandler.isNetworkAvailable(this)) {
             var sendOrder = sendOrder()
@@ -100,6 +149,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
         override fun onPostExecute(result: String?) {
             if(result==RESPONSE_OK) {
                 Toast.makeText(this@ConfirmOrderActivity, "Order placed successfully", Toast.LENGTH_SHORT).show()
+                finish()
             }
             else{
                 Toast.makeText(this@ConfirmOrderActivity, "Error placing your order", Toast.LENGTH_SHORT).show()

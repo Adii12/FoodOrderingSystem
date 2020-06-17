@@ -199,4 +199,17 @@
         app:layout_constraintTop_toTopOf="@+id/streetNameEditText"
         app:layout_constraintVertical_bias="0.0" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/getAdressButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="1dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sendButton"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumberEditText"
+        app:srcCompat="@drawable/ic_pin" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

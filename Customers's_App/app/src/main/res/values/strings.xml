@@ -8,4 +8,13 @@
     <string name="nav_cart">Cart</string>
     <string name="nav_log_out">Log Out</string>
     <string name="no_internet">No internet connection</string>
+    <string name="total_price">Total price:</string>
+    <string name="city">City:</string>
+    <string name="county">County:</string>
+    <string name="street_name">Street Name:</string>
+    <string name="street_number">Street Number:</string>
+    <string name="status">Status:</string>
+    <string name="phone_number">Phone number:</string>
+    <string name="first_name">First name:</string>
+    <string name="last_name">Last name:</string>
 </resources>

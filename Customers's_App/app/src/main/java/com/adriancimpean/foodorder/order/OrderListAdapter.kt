@@ -1,13 +1,11 @@
 package com.adriancimpean.foodorder.order
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import com.adriancimpean.foodorder.R
 
 class OrderListAdapter : ArrayAdapter<Order> {
@@ -30,6 +28,12 @@ class OrderListAdapter : ArrayAdapter<Order> {
         var orderInfo = retView.findViewById(R.id.orderInfo) as ImageButton
 
         orderIdText.text=orderID
+
+        orderInfo.setOnClickListener {
+            var orderDetailsActivity = Intent(context, OrderDetailsActivity::class.java)
+            orderDetailsActivity.putExtra("order-id", orderID)
+            mContext.startActivity(orderDetailsActivity)
+        }
 
         return retView
     }

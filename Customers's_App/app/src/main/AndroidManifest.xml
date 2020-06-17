@@ -3,6 +3,8 @@
     package="com.adriancimpean.foodorder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -11,9 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".order.ConfirmOrderActivity"
-                  android:windowSoftInputMode="stateVisible|adjustPan"/>
-
+        <activity android:name=".order.OrderDetailsActivity"></activity>
+        <activity
+            android:name=".order.ConfirmOrderActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity android:name=".order.cart.CartActivity" />
         <activity android:name=".order.OrdersActivity" />
         <activity
