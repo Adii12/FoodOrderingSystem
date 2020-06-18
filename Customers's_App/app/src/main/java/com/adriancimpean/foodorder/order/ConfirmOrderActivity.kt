@@ -14,6 +14,7 @@ import com.adriancimpean.foodorder.location.AddressHandler
 import com.adriancimpean.foodorder.location.LocationHandler
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.ConnectionHandler
+import com.adriancimpean.foodorder.connection.TCPClient
 import com.adriancimpean.foodorder.order.cart.Cart
 import com.adriancimpean.foodorder.order.cart.CartListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -77,6 +78,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
 
         sendButton!!.setOnClickListener {
             placeOrder()
+            TCPClient(listItems!![0].Name.toString()).start()
         }
 
         getAddressButton!!.setOnClickListener {
@@ -112,7 +114,6 @@ class ConfirmOrderActivity : AppCompatActivity() {
         for(i in 0 until listItems!!.size) {
             orderArr.put(i, listItems!![i].Name.toString())
         }
-
 
         orderItems.put("Items", orderArr)
         orderItems.put("first name", CurrentUser.firstName)
@@ -151,6 +152,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this@ConfirmOrderActivity, "Error placing your order", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 }
