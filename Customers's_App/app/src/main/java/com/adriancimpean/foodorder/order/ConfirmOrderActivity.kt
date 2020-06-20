@@ -10,8 +10,8 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.adriancimpean.foodorder.CurrentUser
-import com.adriancimpean.foodorder.location.AddressHandler
-import com.adriancimpean.foodorder.location.LocationHandler
+import com.adriancimpean.foodorder.location.AddressRepository
+import com.adriancimpean.foodorder.location.LocationRepository
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.connection.ConnectionHandler
 import com.adriancimpean.foodorder.connection.TCPClient
@@ -28,10 +28,11 @@ import kotlin.collections.ArrayList
 
 class ConfirmOrderActivity : AppCompatActivity() {
     private val RESPONSE_OK = "200"
-    private var loc: Location? = null
+    private val COMMAND_HEADER = "createOrder|"
+
     private var latitude : Double? = null
     private var longitude : Double? = null
-    private var addressHandler : AddressHandler? = null
+    private var addressRepository : AddressRepository? = null
 
     private var orderListView : ListView? = null
     private var cityEditText : EditText? = null
@@ -78,37 +79,39 @@ class ConfirmOrderActivity : AppCompatActivity() {
 
         sendButton!!.setOnClickListener {
             placeOrder()
-            TCPClient(listItems!![0].Name.toString()).start()
         }
 
         getAddressButton!!.setOnClickListener {
-            var location = LocationHandler(this@ConfirmOrderActivity, this@ConfirmOrderActivity)
+            val location = LocationRepository(this@ConfirmOrderActivity, this@ConfirmOrderActivity)
 
-
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this@ConfirmOrderActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 50);
             }
 
             latitude = location.getLatitutde()
             longitude = location.getLongitude()
 
-            addressHandler = AddressHandler(this@ConfirmOrderActivity, latitude, longitude)
+            addressRepository = AddressRepository(this@ConfirmOrderActivity, latitude, longitude)
 
-            cityEditText!!.setText(addressHandler?.getCity())
-            countyEditText!!.setText(addressHandler?.getCounty())
-            streetNameEditText!!.setText(addressHandler?.getStreetName())
-            streetNoEditText!!.setText(addressHandler?.getStreetNumber())
-
+            cityEditText!!.setText(addressRepository?.getCity())
+            countyEditText!!.setText(addressRepository?.getCounty())
+            streetNameEditText!!.setText(addressRepository?.getStreetName())
+            streetNoEditText!!.setText(addressRepository?.getStreetNumber())
         }
     }
 
     private fun placeOrder(){
         var orderItems = JSONObject()
         var orderArr = JSONArray()
+        var serverString = COMMAND_HEADER
 
         for(i in 0 until listItems!!.size) {
             orderArr.put(i, listItems!![i].Name.toString())
+            serverString += listItems!![i].Name as String + "|"
         }
+
+        TCPClient(serverString).start()
+        TCPClient("!DISCONNECT").start()
 
         orderItems.put("Items", orderArr)
         orderItems.put("first name", CurrentUser.firstName)
@@ -126,12 +129,14 @@ class ConfirmOrderActivity : AppCompatActivity() {
         val currentDate = sdf.format(Date())
         orderItems.put("date", currentDate)
 
-        if(ConnectionHandler.isNetworkAvailable(this)) {
+        if(ConnectionHandler.isNetworkAvailable(this@ConfirmOrderActivity)) {
             var sendOrder = sendOrder()
             sendOrder.execute(orderItems)
         } else {
             Snackbar.make(window.decorView.rootView, R.string.no_internet, Snackbar.LENGTH_SHORT).show()
         }
+
+
     }
 
     inner class sendOrder : AsyncTask<JSONObject, Void, String>(){
@@ -147,7 +152,6 @@ class ConfirmOrderActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this@ConfirmOrderActivity, "Error placing your order", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }

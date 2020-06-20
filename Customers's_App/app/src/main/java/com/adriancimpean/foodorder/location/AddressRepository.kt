@@ -5,7 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import java.util.*
 
-class AddressHandler(context: Context, latitude: Double?, longitude: Double?)   {
+class AddressRepository(context: Context, latitude: Double?, longitude: Double?)   {
     var mContext = context
     var geocoder : Geocoder
     var addresses : List<Address>

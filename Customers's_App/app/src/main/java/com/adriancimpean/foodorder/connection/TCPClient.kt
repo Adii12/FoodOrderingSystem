@@ -23,16 +23,17 @@ class TCPClient(msg: String) : Thread() {
 
             var printWriter = PrintWriter(clientSocket.getOutputStream())
 
-            println("Socket: $clientSocket.isConnected")
+            println("Socket: ${clientSocket.isConnected}")
 
             var msg_length = messsage.length
             var send_length : String = msg_length.toString()
-            send_length += " ".repeat(HEADER-send_length.length)
+            send_length += " ".repeat(HEADER - send_length.length)
 
             printWriter.print(send_length)
             printWriter.print(messsage)
 
             printWriter.flush()
+
             printWriter.close()
             clientSocket.close()
             println("Socket closed ${clientSocket.isClosed}")
@@ -43,5 +44,7 @@ class TCPClient(msg: String) : Thread() {
             Log.e("SOCKET CONNECTION", ioException.printStackTrace().toString())
         }
     }
+
+
 
 }

@@ -17,7 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import java.lang.Exception
 
-class LocationHandler(context: Context, activity: Activity) : LocationListener, Service() {
+class LocationRepository(context: Context, activity: Activity) : LocationListener, Service() {
     private var mContext : Context = context
     private var mActivity : Activity = activity
 
