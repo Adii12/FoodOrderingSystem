@@ -38,6 +38,7 @@ def start():
     server.listen()
     db.createTable()
     print(f"[LISTENING] Server is listening on {HOST}")
+    print("------------------------------------------")
     while True:
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
@@ -46,11 +47,15 @@ def start():
 
 
 def handle_message(message):
-    if(message.startswith("test")):
+    print()
+    if(message.startswith("createOrder", 0, len("createOrder"))):
+        print("--[SERVER] Order created.")
+    elif(message.startswith("test")):
         db.test()
     elif(message.startswith("showTables")):
         db.showTables()
         db.showValues()
+    
 
 
 start()
