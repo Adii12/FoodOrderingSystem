@@ -83,7 +83,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
 
         getAddressButton!!.setOnClickListener {
             var location = LocationHandler(this@ConfirmOrderActivity, this@ConfirmOrderActivity)
-            addressHandler = AddressHandler(this@ConfirmOrderActivity)
+
 
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this@ConfirmOrderActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION), 50);
@@ -92,18 +92,13 @@ class ConfirmOrderActivity : AppCompatActivity() {
             latitude = location.getLatitutde()
             longitude = location.getLongitude()
 
-            //Toast.makeText(this@ConfirmOrderActivity, "LAT= $latitude \nLON= $longitude", Toast.LENGTH_LONG).show();
-            //Toast.makeText(this@ConfirmOrderActivity,address?.getAdresses(latitude, longitude),Toast.LENGTH_SHORT).show()
+            addressHandler = AddressHandler(this@ConfirmOrderActivity, latitude, longitude)
 
-            var address = addressHandler?.getAdresses(latitude, longitude)
+            cityEditText!!.setText(addressHandler?.getCity())
+            countyEditText!!.setText(addressHandler?.getCounty())
+            streetNameEditText!!.setText(addressHandler?.getStreetName())
+            streetNoEditText!!.setText(addressHandler?.getStreetNumber())
 
-            cityEditText!!.setText(address?.locality)
-            countyEditText!!.setText(address?.adminArea)
-           println(address?.thoroughfare)
-            println(address?.subThoroughfare)
-            println(address?.featureName)
-
-            Toast.makeText(this@ConfirmOrderActivity, address?.getAddressLine(0), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -127,7 +122,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
         orderItems.put("Price", Cart.getTotalPrice().toString())
         orderItems.put("status", "Pending")
 
-        val sdf = SimpleDateFormat("dd/MM/yyyy - hh:mm")
+        val sdf = SimpleDateFormat("dd/MM/yyyy - HH:mm")
         val currentDate = sdf.format(Date())
         orderItems.put("date", currentDate)
 

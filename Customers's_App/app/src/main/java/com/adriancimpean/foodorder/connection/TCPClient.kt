@@ -25,11 +25,6 @@ class TCPClient(msg: String) : Thread() {
 
             println("Socket: $clientSocket.isConnected")
 
-           // var whiteSpaces = " ".repeat(HEADER-messsage.length)
-            //println("FINAL MESSAGE: $finalMessage")
-            //printWriter.print(messsage.length.toString()+whiteSpaces)
-           // printWriter.print(messsage)
-
             var msg_length = messsage.length
             var send_length : String = msg_length.toString()
             send_length += " ".repeat(HEADER-send_length.length)

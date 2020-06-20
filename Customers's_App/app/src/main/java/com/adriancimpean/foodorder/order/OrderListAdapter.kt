@@ -8,17 +8,14 @@ import android.view.ViewGroup
 import android.widget.*
 import com.adriancimpean.foodorder.R
 
-class OrderListAdapter : ArrayAdapter<Order> {
-    private var mContext : Context
-    private var mResource : Int? = null
-
-    constructor(context: Context, resource : Int, orders : ArrayList<Order>) : super(context, resource, orders){
-        mContext=context
-        mResource = resource
-    }
+class OrderListAdapter(context: Context, resource: Int, orders: ArrayList<Order>) :
+    ArrayAdapter<Order>(context, resource, orders) {
+    private var mContext : Context = context
+    private var mResource : Int = resource
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var orderID = getItem(position)?.id
+        var orderDate = getItem(position)?.date
         var ordersList = getItem(position)?.items
         var totalPrice = getItem(position)?.totalPrice
 
@@ -27,7 +24,7 @@ class OrderListAdapter : ArrayAdapter<Order> {
         var orderIdText = retView.findViewById(R.id.orderIdText) as TextView
         var orderInfo = retView.findViewById(R.id.orderInfo) as ImageButton
 
-        orderIdText.text=orderID
+        orderIdText.text=orderDate
 
         orderInfo.setOnClickListener {
             var orderDetailsActivity = Intent(context, OrderDetailsActivity::class.java)

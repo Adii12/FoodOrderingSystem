@@ -44,7 +44,7 @@ class OrderDetailsActivity : AppCompatActivity() {
             }
 
 
-            tvTotalPrice?.text = data?.getDouble("Price").toString()
+            tvTotalPrice?.text = data?.getDouble("Price").toString() + "Ron"
             tvStatus?.text = data?.getString("status")
             tvCounty?.text = data?.getString("county")
             tvCity?.text = data?.getString("city")

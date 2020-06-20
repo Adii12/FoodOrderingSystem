@@ -95,7 +95,8 @@ class OrdersActivity : AppCompatActivity() {
                     }
 
                     var price = arrData!!.getJSONObject(i).getDouble("Price")
-                    var userOrder = Order(arrData!!.getJSONObject(i).get("date").toString(), orderItems!!, price)
+                    var date = arrData!!.getJSONObject(i).getString("date")
+                    var userOrder = Order(data!!.names()!![i] as String, orderItems!!, price, date)
                     listItems!!.add(userOrder)
                     listAdapter!!.notifyDataSetChanged()
                 }
