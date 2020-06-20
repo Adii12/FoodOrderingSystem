@@ -39,8 +39,8 @@ class CartActivity : AppCompatActivity() {
         listAdapter?.notifyDataSetChanged()
 
         sendOrderButton!!.setOnClickListener {
-            var cartActivity = Intent(this@CartActivity, ConfirmOrderActivity::class.java)
-            startActivity(cartActivity)
+            var confirmOrderActivity = Intent(this@CartActivity, ConfirmOrderActivity::class.java)
+            startActivity(confirmOrderActivity)
         }
 
         bottomNav=findViewById(R.id.bottomNav)

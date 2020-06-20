@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.annotation.UiThread
 import com.adriancimpean.foodorder.R
 import com.adriancimpean.foodorder.order.Item
 
@@ -43,7 +44,7 @@ class CartListAdapter : ArrayAdapter<Item> {
 
 
         removeButton?.setOnClickListener {
-            var item = getItem(position)
+            val item = getItem(position)
             Cart.removeFromCart(item!!)
             println("Adapter - removed")
             notifyDataSetChanged()
