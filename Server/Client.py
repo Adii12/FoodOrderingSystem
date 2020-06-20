@@ -1,4 +1,5 @@
 import socket
+import sys
 
 PORT = 8000
 HOST = "192.168.0.126"
@@ -7,7 +8,13 @@ FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((HOST, PORT))
+
+try:
+    print("Connecting to server...")
+    client.connect((HOST, PORT))
+except:
+    print("Error connecting to server")
+    sys.exit()
 
 
 def send(msg):
@@ -19,6 +26,8 @@ def send(msg):
     client.send(message)
 
 
-send("Hello World")
-send("Hello hello")
+
+send("test World")
+send("showTables")
 send(DISCONNECT_MESSAGE)
+

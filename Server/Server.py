@@ -1,5 +1,6 @@
 import socket
 import threading
+import DatabaseHandler as db
 
 PORT = 8000
 HOST = socket.gethostbyname(socket.gethostname())
@@ -20,8 +21,12 @@ def handle_client(conn, addr):
         if msg_length:
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
+            
             if msg == DISCONNECT_MESSAGE:
                 connected = False
+                print(f"[DISCONNECT] {addr} disconnected.")
+            else:
+                handle_message(msg)
 
             print(f"[{addr}]: {msg}")
 
@@ -29,7 +34,9 @@ def handle_client(conn, addr):
 
 
 def start():
+    print("[STARTING] Server is starting...")
     server.listen()
+    db.createTable()
     print(f"[LISTENING] Server is listening on {HOST}")
     while True:
         conn, addr = server.accept()
@@ -38,5 +45,12 @@ def start():
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
 
-print("[STARTING] server is starting...")
+def handle_message(message):
+    if(message.startswith("test")):
+        db.test()
+    elif(message.startswith("showTables")):
+        db.showTables()
+        db.showValues()
+
+
 start()
