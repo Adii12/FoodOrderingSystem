@@ -16,7 +16,6 @@ except:
     print("Error connecting to server")
     sys.exit()
 
-
 def send(msg):
     message = msg.encode(FORMAT)
     msg_length = len(message)
@@ -26,8 +25,9 @@ def send(msg):
     client.send(message)
 
 
+send("!createNewOrder|2|CheeseBurger|Pizza|55|-m9xnifgy")
+send("!showOrders")
+#send("!createOrder")
 
-send("test World")
-send("showTables")
 send(DISCONNECT_MESSAGE)
 
