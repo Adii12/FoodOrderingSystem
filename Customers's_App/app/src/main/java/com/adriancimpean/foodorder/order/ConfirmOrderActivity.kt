@@ -28,7 +28,7 @@ import kotlin.collections.ArrayList
 
 class ConfirmOrderActivity : AppCompatActivity() {
     private val RESPONSE_OK = "200"
-    private val COMMAND_HEADER = "createOrder|"
+    private val COMMAND_HEADER = "!createNewOrder|"
 
     private var latitude : Double? = null
     private var longitude : Double? = null
@@ -105,13 +105,15 @@ class ConfirmOrderActivity : AppCompatActivity() {
         var orderArr = JSONArray()
         var serverString = COMMAND_HEADER
 
+        serverString += listItems!!.size.toString() + "|"
         for(i in 0 until listItems!!.size) {
             orderArr.put(i, listItems!![i].Name.toString())
             serverString += listItems!![i].Name as String + "|"
         }
+        serverString += Cart.getTotalPrice().toString() + "|"
+        serverString += CurrentUser.user_id
 
-        TCPClient(serverString).start()
-        TCPClient("!DISCONNECT").start()
+        TCPClient(this@ConfirmOrderActivity ,serverString).start()
 
         orderItems.put("Items", orderArr)
         orderItems.put("first name", CurrentUser.firstName)

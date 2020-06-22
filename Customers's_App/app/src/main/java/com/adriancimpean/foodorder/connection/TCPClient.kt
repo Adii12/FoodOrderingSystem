@@ -1,19 +1,26 @@
 package com.adriancimpean.foodorder.connection
 
+import android.content.Context
+import android.content.Context.WIFI_SERVICE
+import android.net.wifi.WifiManager
+import android.text.format.Formatter.formatIpAddress
 import android.util.Log
 import okio.ByteString
 import okio.ByteString.Companion.encode
 import okio.ByteString.Companion.encodeUtf8
 import java.io.*
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.UnknownHostException
+import java.util.*
 
-class TCPClient(msg: String) : Thread() {
+class TCPClient(context : Context, msg: String) : Thread() {
     private val SERVER_IP = "192.168.0.126"
     private val PORT = 8000
     private val HEADER = 10
     private var messsage  = msg
+    private var context = context
 
 
     override fun run() {
@@ -44,7 +51,4 @@ class TCPClient(msg: String) : Thread() {
             Log.e("SOCKET CONNECTION", ioException.printStackTrace().toString())
         }
     }
-
-
-
 }

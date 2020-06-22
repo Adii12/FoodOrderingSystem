@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".order.OrderDetailsActivity"></activity>
+        <activity android:name=".order.OrderDetailsActivity"/>
         <activity
             android:name=".order.ConfirmOrderActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
