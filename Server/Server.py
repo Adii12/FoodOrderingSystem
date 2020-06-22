@@ -39,7 +39,6 @@ def start():
     server.listen()
     db.createTables()
     print(f"[LISTENING] Server is listening on {HOST}")
-    print("CTRL - C to stop server")
     print("------------------------------------------")
     try:
         while True:
