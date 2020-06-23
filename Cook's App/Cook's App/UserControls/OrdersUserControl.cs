@@ -41,7 +41,7 @@ namespace Cook_s_App.UserControls {
         }
 
         private void getOrders() {
-            String URL = "https://food-order-bbcce.firebaseio.com/Orders.json";
+            /*String URL = "https://food-order-bbcce.firebaseio.com/Orders.json";
             JObject data = JObject.Parse(ConnectionHandler.getRequest(URL));
             //JArray dataarr = (JArray)data;
             //String status = data.SelectToken("status");
@@ -50,7 +50,26 @@ namespace Cook_s_App.UserControls {
             MessageBox.Show(data.Root.ToString());
             //MessageBox.Show(data.Values<string>.ToString());
            samplePendingOrder[0] = new PendingOrderLayout(data.Children().Values().ToString() , data["-M9Te98tJAds8ga9RT0h"]["status"].ToString());
-            pendingOrdersPanel.Controls.Add(samplePendingOrder[0]);
+            pendingOrdersPanel.Controls.Add(samplePendingOrder[0]);*/
+
+            String ordersString = ConnectionHandler.SocketClient();
+            String[] ordersList = ordersString.Split('/');
+
+            int pendingOrderNumber = 0;
+            String[] order;
+            for (int i=0; i<ordersList.Length; i++) {
+                 order = ordersList[i].Split('_');
+
+                String items = "";
+                
+                for (int k = 1; k < order.Length; k++) {
+                      items += order[k].ToString();
+                }
+                samplePendingOrder[pendingOrderNumber] = new PendingOrderLayout(order[0].ToString(), items);
+                pendingOrdersPanel.Controls.Add(samplePendingOrder[pendingOrderNumber]); 
+                
+                pendingOrderNumber++;
+            }
         }
 
         public FlowLayoutPanel activeOrders {

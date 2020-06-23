@@ -23,10 +23,11 @@ def send(msg):
     send_length += b' ' * (HEADER - len(send_length))
     client.send(send_length)
     client.send(message)
+    print(client.recv(1024).decode(FORMAT))
 
 
-send("!createNewOrder|2|CheeseBurger|Pizza|55|-m9xnifgy")
-send("!showOrders")
+#send("!createNewOrder|2|CheeseBurger|Pizza|55|-m9xnifgy")
+send("!getOrders")
 #send("!createOrder")
 
 send(DISCONNECT_MESSAGE)

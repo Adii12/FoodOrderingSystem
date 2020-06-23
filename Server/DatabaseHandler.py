@@ -30,9 +30,33 @@ def selectOrders():
     string = "SELECT Orders.OrderID, Orders.CustomerID, Orders.Price, OrderItems.ItemName FROM Orders INNER JOIN OrderItems On Orders.OrderID=OrderItems.OrderID;"
     cursor = conn.execute(string)
 
+    orders=""
     for row in cursor :
-        print("Order id =", row[0])
-        print("CustomerID =", row[1])
-        print("Total price =", row[2])
-        print("Items =", row[3])
-        print("\n")
+        orders+=str(row[0])
+        orders+="_"
+        orders+=str(row[1])
+        orders+="_"
+        orders+=str(row[2])
+        orders+="_"
+        orders+=str(row[3])
+        orders+="/"
+        #print("Order id =", row[0])
+        #print("CustomerID =", row[1])
+        #print("Total price =", row[2])
+        #print("Items =", row[3])
+        #print("\n")
+
+    return orders
+
+def selectOrdersItems():
+    string = "SELECT Orders.OrderID, OrderItems.ItemName FROM Orders INNER JOIN OrderItems On Orders.OrderID=OrderItems.OrderID;"
+    cursor = conn.execute(string)
+    
+    orders=""
+    for row in cursor :
+        orders+=str(row[0])
+        orders+="_"
+        orders+=str(row[1])
+        orders+="/"
+
+    return orders

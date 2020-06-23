@@ -24,7 +24,7 @@ def handle_client(conn, addr):
             msg = conn.recv(msg_length).decode(FORMAT)
             
             print(f"[{addr}]: {msg}")
-
+            
             if msg == DISCONNECT_MESSAGE:
                 connected = False
                 print(f"[DISCONNECT] {addr} disconnected.")
@@ -52,13 +52,16 @@ def start():
         raise
 
 
-
 def handle_message(message, conn):
-    if(message.startswith("!createOrder")):
-        print("[SERVER] Order created.")
     
-    elif(message.startswith("!showOrders")):
-        db.selectOrders()
+    if(message.startswith("!getOrderItems")):
+        orders = db.selectOrdersItems()
+        conn.send(orders.encode(FORMAT))
+    
+    elif(message.startswith("!getOrders")):
+        orders = db.selectOrders()
+        conn.send(orders.encode(FORMAT))
+        
     
     elif(message.startswith("!createNewOrder")):
         #message received = msg_command, no of items, item1, item2...., totalOrderPrice, customerID
@@ -69,8 +72,8 @@ def handle_message(message, conn):
         for i in range(int(msgList[0])):
             items.append(msgList[i+1])
 
-        print(msgList)
-        print(items)
+        #print(msgList)
+        #print(items)
 
         totalOrderPrice=msgList[int(msgList[0])+1]
         customerID = msgList[int(msgList[0])+2]
