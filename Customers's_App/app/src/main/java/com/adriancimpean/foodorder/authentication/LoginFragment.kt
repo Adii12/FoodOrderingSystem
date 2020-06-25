@@ -61,27 +61,25 @@ class LoginFragment : Fragment() {
     }
 
     private fun login(usernameText: EditText, passwordText: EditText) {
-        var dataArr = data!!.toJSONArray(data!!.names())
+        val dataArr = data!!.toJSONArray(data!!.names())
         var loginOk = false
 
         for (i in 0 until dataArr!!.length()) {
-            var username = dataArr.getJSONObject(i).get("username").toString()
-            var password = dataArr.getJSONObject(i).get("password").toString()
-
+            val username = dataArr.getJSONObject(i).get("username").toString()
+            val password = dataArr.getJSONObject(i).get("password").toString()
 
             loginOk = false
-
             if (username == usernameText.text.toString() && password == passwordText.text.toString()) {
                 loginOk = true
 
-                var firstName = dataArr.getJSONObject(i).get("first name").toString()
-                var lastName = dataArr.getJSONObject(i).get("last name").toString()
-                var city = dataArr.getJSONObject(i).get("city").toString()
-                var county = dataArr.getJSONObject(i).get("county").toString()
-                var streetName = dataArr.getJSONObject(i).get("street").toString()
-                var streetNo = dataArr.getJSONObject(i).get("number").toString()
-                var phoneNo = dataArr.getJSONObject(i).get("phone number").toString()
-                var user_id = data!!.names()!![i]
+                val firstName = dataArr.getJSONObject(i).get("first name").toString()
+                val lastName = dataArr.getJSONObject(i).get("last name").toString()
+                val city = dataArr.getJSONObject(i).get("city").toString()
+                val county = dataArr.getJSONObject(i).get("county").toString()
+                val streetName = dataArr.getJSONObject(i).get("street").toString()
+                val streetNo = dataArr.getJSONObject(i).get("number").toString()
+                val phoneNo = dataArr.getJSONObject(i).get("phone number").toString()
+                val user_id = data!!.names()!![i]
 
                 CurrentUser.setData(firstName, lastName, username, city, county, streetName, streetNo, phoneNo, user_id as String)
                 break

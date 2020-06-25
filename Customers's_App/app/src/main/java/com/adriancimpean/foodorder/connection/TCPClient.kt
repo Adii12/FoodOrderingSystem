@@ -1,19 +1,14 @@
 package com.adriancimpean.foodorder.connection
 
 import android.content.Context
-import android.content.Context.WIFI_SERVICE
-import android.net.wifi.WifiManager
-import android.text.format.Formatter.formatIpAddress
 import android.util.Log
-import okio.ByteString
-import okio.ByteString.Companion.encode
-import okio.ByteString.Companion.encodeUtf8
-import java.io.*
-import java.net.InetAddress
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.PrintWriter
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.UnknownHostException
-import java.util.*
 
 class TCPClient(context : Context, msg: String) : Thread() {
     private val SERVER_IP = "192.168.0.126"
@@ -25,22 +20,19 @@ class TCPClient(context : Context, msg: String) : Thread() {
 
     override fun run() {
         try {
-            var clientSocket = Socket()
+            val clientSocket = Socket()
             clientSocket.connect(InetSocketAddress(SERVER_IP, PORT), 1000)
 
-            var printWriter = PrintWriter(clientSocket.getOutputStream())
-
+            val printWriter = PrintWriter(clientSocket.getOutputStream())
             println("Socket: ${clientSocket.isConnected}")
 
-            var msg_length = messsage.length
+            val msg_length = messsage.length
             var send_length : String = msg_length.toString()
             send_length += " ".repeat(HEADER - send_length.length)
 
             printWriter.print(send_length)
             printWriter.print(messsage)
-
             printWriter.flush()
-
             printWriter.close()
             clientSocket.close()
             println("Socket closed ${clientSocket.isClosed}")
